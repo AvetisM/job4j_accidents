@@ -6,14 +6,18 @@ import ru.job4j.accidents.model.Accident;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class AccidentMem implements Store {
+
+    private final AtomicInteger currentId = new AtomicInteger(0);
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
     public AccidentMem() {
-        Accident acc1 = new Accident(1, "Сбил пешехода",
+        Accident acc1 = new Accident(currentId.incrementAndGet(), "Сбил пешехода",
                 "Черный седан номера м138ае26", "Московская 50");
         this.accidents.put(acc1.getId(), acc1);
     }
@@ -21,5 +25,29 @@ public class AccidentMem implements Store {
     @Override
     public List<Accident> findAll() {
         return new ArrayList<>(accidents.values());
+    }
+
+    @Override
+    public Optional<Accident> findById(int id) {
+        if (accidents.containsKey(id)) {
+            return Optional.of(accidents.get(id));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean add(Accident accident) {
+        accident.setId(currentId.incrementAndGet());
+        accidents.put(accident.getId(), accident);
+        return true;
+    }
+
+    @Override
+    public boolean update(Accident accident) {
+        if (accidents.containsKey(accident.getId())) {
+            accidents.replace(accident.getId(), accident);
+            return true;
+        }
+        return false;
     }
 }

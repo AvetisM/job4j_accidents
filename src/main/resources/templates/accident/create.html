@@ -1,11 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -14,37 +11,39 @@
           integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
           integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-  <title>accidents</title>
+  <title>Автомобильные инцеденты</title>
 </head>
 <body>
 <div class="container">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="#">Главная</a>
+      <a class="nav-item nav-link" href="#">Главная</a>
       <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
-      <a class="nav-item nav-link" th:href="@{accidents/formAdd}">Добавить Инцидент</a>
+      <a class="nav-item nav-link active" th:href="@{accidents/formAdd}">Добавить Инцидент</a>
     </div>
     <div th:text="${user}"></div>
   </nav>
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Название</th>
-      <th scope="col">Описание</th>
-      <th scope="col">Адресс</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="accident: ${accidents}">
-      <td th:text="${accident.id}"></td>
-      <td><a th:text="${accident.name}" th:href="@{|/accidents/formEdit/${accident.id}|}"></a></td>
-      <td th:text="${accident.text}"></td>
-      <td th:text="${accident.address}"></td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="row pt-3">
+    <div class="card" style="width: 100%">
+      <div class="card-header">
+        Новый инцидент
+      </div>
+      <div class="card-body">
+        <form th:action="@{/accidents/create}" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="id" value="0"/>
+          <div class="form-group">
+            <label for="name">Имя</label>
+            <input type="text" class="form-control" name="name" id="name" required>
+            <label for="text">Описание</label>
+            <textarea class="form-control" name="text"  id="text" rows="15" placeholder="Опишите нарушение"></textarea>
+            <label for="address">Адресс</label>
+            <input type="text" class="form-control" name="address" id="address">
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>
