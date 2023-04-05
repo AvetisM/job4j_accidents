@@ -29,25 +29,17 @@ public class AccidentMem implements Store {
 
     @Override
     public Optional<Accident> findById(int id) {
-        if (accidents.containsKey(id)) {
-            return Optional.of(accidents.get(id));
-        }
-        return Optional.empty();
+        return Optional.ofNullable(accidents.get(id));
     }
 
     @Override
     public boolean add(Accident accident) {
         accident.setId(currentId.incrementAndGet());
-        accidents.put(accident.getId(), accident);
-        return true;
+        return accidents.putIfAbsent(accident.getId(), accident) == null;
     }
 
     @Override
     public boolean update(Accident accident) {
-        if (accidents.containsKey(accident.getId())) {
-            accidents.replace(accident.getId(), accident);
-            return true;
-        }
-        return false;
+        return accidents.replace(accident.getId(), accidents.get(accident.getId()), accident);
     }
 }
