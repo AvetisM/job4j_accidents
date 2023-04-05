@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.service.AccidentService;
-
+import ru.job4j.accidents.service.AccidentTypeService;
 import java.util.Optional;
 
 @Controller
@@ -14,6 +14,7 @@ import java.util.Optional;
 @RequestMapping("/accidents")
 public class AccidentController {
     private final AccidentService accidentService;
+    private final AccidentTypeService accidentTypeService;
 
     @GetMapping
     public String accidents(Model model) {
@@ -23,7 +24,8 @@ public class AccidentController {
     }
 
     @GetMapping("/formAdd")
-    public String formAdd() {
+    public String formAdd(Model model) {
+        model.addAttribute("types", accidentTypeService.getAccidentTypes());
         return "accident/create";
     }
 
@@ -35,6 +37,8 @@ public class AccidentController {
         }
         Accident accident = optionalAccident.get();
         model.addAttribute("accident", accident);
+        model.addAttribute("types", accidentTypeService.getAccidentTypes());
+        model.addAttribute("accidentTypeId", accident.getType().getId());
         return "accident/edit";
     }
 

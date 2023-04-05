@@ -34,6 +34,16 @@
           <div class="form-group">
             <label for="name">Имя</label>
             <input type="text" class="form-control" name="name" id="name" th:field="*{name}" required>
+            <div class="form-group">
+              <label for="type.id">Тип</label>
+              <select class="form-control" id="type.id"  name="type.id">
+                <option th:each="type: ${types}"
+                        th:text="${type.name}"
+                        th:value="${type.id}"
+                        th:selected="${type.id==accidentTypeId}">
+                </option>
+              </select>
+            </div>
             <label for="text">Описание</label>
             <textarea class="form-control" name="text"  id="text" th:field="*{text}" rows="15" placeholder="Опишите нарушение"></textarea>
             <label for="address">Адресс</label>

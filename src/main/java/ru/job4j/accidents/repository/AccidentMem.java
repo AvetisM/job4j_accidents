@@ -2,6 +2,7 @@ package ru.job4j.accidents.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.model.AccidentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public class AccidentMem implements Store {
 
     public AccidentMem() {
         Accident acc1 = new Accident(currentId.incrementAndGet(), "Сбил пешехода",
-                "Черный седан номера м138ае26", "Московская 50");
+                "Черный седан номера м138ае26", "Московская 50",
+                new AccidentType(1, "Две машины"));
         this.accidents.put(acc1.getId(), acc1);
     }
 

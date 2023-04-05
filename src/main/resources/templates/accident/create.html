@@ -19,7 +19,6 @@
     <div class="navbar-nav">
       <a class="nav-item nav-link" href="#">Главная</a>
       <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
-      <a class="nav-item nav-link active" th:href="@{accidents/formAdd}">Добавить Инцидент</a>
     </div>
     <div th:text="${user}"></div>
   </nav>
@@ -34,6 +33,14 @@
           <div class="form-group">
             <label for="name">Имя</label>
             <input type="text" class="form-control" name="name" id="name" required>
+            <div class="form-group">
+              <label for="type.id">Тип</label>
+              <select class="form-control" id="type.id"  name="type.id">
+                <option th:each="type: ${types}"
+                        th:text="${type.name}"
+                        th:value="${type.id}"></option>
+              </select>
+            </div>
             <label for="text">Описание</label>
             <textarea class="form-control" name="text"  id="text" rows="15" placeholder="Опишите нарушение"></textarea>
             <label for="address">Адресс</label>
