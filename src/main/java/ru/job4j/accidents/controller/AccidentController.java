@@ -27,8 +27,8 @@ public class AccidentController {
         return "accident/create";
     }
 
-    @GetMapping("/formEdit/{id}")
-    public String formDetail(Model model, @PathVariable("id") int id) {
+    @GetMapping("/formEdit")
+    public String formEdit(@RequestParam("id") int id, Model model) {
         Optional<Accident> optionalAccident = accidentService.findById(id);
         if (optionalAccident.isEmpty()) {
             return "accident/accidents";
