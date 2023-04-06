@@ -41,6 +41,14 @@
                         th:value="${type.id}"></option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="type.id" name="rIds">Статья</label>
+              <select class="form-control" id="rIds" name="rIds" multiple>
+                <option th:each="rule: ${rules}"
+                        th:text="${rule.name}"
+                        th:value="${rule.id}"></option>
+              </select>
+            </div>
             <label for="text">Описание</label>
             <textarea class="form-control" name="text"  id="text" rows="15" placeholder="Опишите нарушение"></textarea>
             <label for="address">Адресс</label>
