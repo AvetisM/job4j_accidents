@@ -2,8 +2,11 @@ package ru.job4j.accidents.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.job4j.accidents.repository.Store;
+import ru.job4j.accidents.repository.AccidentJdbcTemplate;
 import ru.job4j.accidents.model.Accident;
+
+import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,9 +14,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AccidentService {
 
-    private final Store store;
+    private final AccidentJdbcTemplate store;
     private final AccidentTypeService accidentTypeService;
-    private final RuleService ruleService;
 
     public List<Accident> findAll() {
       return store.findAll();
@@ -23,20 +25,19 @@ public class AccidentService {
         return store.findById(id);
     }
 
-    public boolean add(Accident accident,  String[] rIds) {
+    @Transactional
+    public Accident add(Accident accident,  String[] rIds) {
         accident.setType(accidentTypeService.getAccidentType(accident.getType().getId()));
-        if (rIds != null) {
-            accident.setRules(ruleService.getRulesByIds(rIds));
-        }
-        return store.add(accident);
+        int[] rulesIdIntArray = Arrays.stream(rIds).mapToInt(Integer::parseInt).toArray();
+        store.add(accident);
+        store.addAccidentRules(accident, rulesIdIntArray);
+        return accident;
     }
 
+    @Transactional
     public boolean update(Accident accident, String[] rIds) {
         accident.setType(accidentTypeService.getAccidentType(accident.getType().getId()));
-        if (rIds != null) {
-            accident.setRules(ruleService.getRulesByIds(rIds));
-        }
-        return store.update(accident);
+        int[] rulesIdIntArray = Arrays.stream(rIds).mapToInt(Integer::parseInt).toArray();
+        return store.update(accident) && store.updateAccidentRules(accident, rulesIdIntArray);
     }
-
 }

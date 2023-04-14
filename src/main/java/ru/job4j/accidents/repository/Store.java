@@ -10,7 +10,11 @@ public interface Store {
 
     Optional<Accident> findById(int id);
 
-    boolean add(Accident accident);
+    Accident add(Accident accident);
 
     boolean update(Accident accident);
+
+    Accident addAccidentRules(Accident accident, int[] rulesIdIntArray);
+
+    boolean updateAccidentRules(Accident accident, int[] rulesIdIntArray);
 }
