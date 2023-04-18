@@ -2,7 +2,6 @@ package ru.job4j.accidents.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.Rule;
 
 import java.sql.ResultSet;
@@ -11,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Service
 @AllArgsConstructor
 public class RuleJdbcTemplate {
 

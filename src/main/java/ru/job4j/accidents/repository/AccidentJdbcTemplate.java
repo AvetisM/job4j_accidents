@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.model.Rule;
@@ -14,9 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-@Repository
 @AllArgsConstructor
-public class AccidentJdbcTemplate implements Store {
+public class AccidentJdbcTemplate {
 
     public static final String INSERT =
             "insert into accident (name, text, address, type_id) values (?, ?, ?, ?)";
@@ -49,7 +47,6 @@ public class AccidentJdbcTemplate implements Store {
 
     private final JdbcTemplate jdbc;
 
-    @Override
     public Accident add(Accident accident) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(connection -> {
@@ -71,12 +68,10 @@ public class AccidentJdbcTemplate implements Store {
         return accident;
     }
 
-    @Override
     public List<Accident> findAll() {
         return jdbc.query(FIND_ALL, (rs, row) -> getAccident(rs));
     }
 
-    @Override
     public Optional<Accident> findById(int id) {
         Accident accident = jdbc.queryForObject(FIND_BY_ID,
                 (resultSet, rowNum) -> getAccident(resultSet), id);
@@ -88,7 +83,6 @@ public class AccidentJdbcTemplate implements Store {
         return Optional.of(accident);
     }
 
-    @Override
     public boolean update(Accident accident) {
         return jdbc.update(
                 UPDATE,
@@ -99,7 +93,6 @@ public class AccidentJdbcTemplate implements Store {
                 accident.getId()) != -1;
     }
 
-    @Override
     public boolean updateAccidentRules(Accident accident, int[] rIds) {
         boolean result = false;
         jdbc.update(DELETE_ACC_RULES, accident.getId());
