@@ -22,10 +22,10 @@ public class Accident {
     private String name;
     private String text;
     private String address;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
     private AccidentType type;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "accident_rules",
             joinColumns = { @JoinColumn(name = "accident_id") },

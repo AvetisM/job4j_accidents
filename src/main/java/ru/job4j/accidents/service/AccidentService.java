@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.model.Rule;
-import ru.job4j.accidents.repository.AccidentHibernate;
 import ru.job4j.accidents.model.Accident;
+import ru.job4j.accidents.repository.AccidentRepository;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
@@ -17,12 +17,12 @@ import java.util.Set;
 @AllArgsConstructor
 public class AccidentService {
 
-    private final AccidentHibernate store;
+    private final AccidentRepository store;
     private final AccidentTypeService accidentTypeService;
     private final RuleService ruleService;
 
     public List<Accident> findAll() {
-      return store.findAll();
+      return (List<Accident>) store.findAll();
     }
 
     public  Optional<Accident>  findById(int id) {
@@ -30,21 +30,21 @@ public class AccidentService {
     }
 
     @Transactional
-    public boolean add(Accident accident,  String[] rIds) {
+    public Accident add(Accident accident,  String[] rIds) {
         if (!checkAndFillAccidentType(accident)) {
-            return false;
+            return accident;
         }
         fillAccidentRules(accident, rIds);
-        return store.add(accident);
+        return store.save(accident);
     }
 
     @Transactional
-    public boolean update(Accident accident, String[] rIds) {
+    public Accident update(Accident accident, String[] rIds) {
         if (!checkAndFillAccidentType(accident)) {
-            return false;
+            return accident;
         }
         fillAccidentRules(accident, rIds);
-        return store.update(accident);
+        return store.save(accident);
     }
 
     private boolean checkAndFillAccidentType(Accident accident) {
