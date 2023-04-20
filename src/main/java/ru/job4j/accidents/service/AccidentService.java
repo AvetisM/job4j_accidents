@@ -22,7 +22,7 @@ public class AccidentService {
     private final RuleService ruleService;
 
     public List<Accident> findAll() {
-      return (List<Accident>) store.findAll();
+      return store.findAll();
     }
 
     public  Optional<Accident>  findById(int id) {
