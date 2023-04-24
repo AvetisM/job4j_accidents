@@ -35,8 +35,8 @@ public class RegControl {
         } catch (Exception e) {
             model.addAttribute("errorMessage",
                     "Failed to register user. А user with this name already exists!");
-            return "reg";
         }
+        return "reg";
     }
 
     @GetMapping("/reg")
