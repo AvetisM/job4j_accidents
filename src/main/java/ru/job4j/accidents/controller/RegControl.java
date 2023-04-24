@@ -10,8 +10,6 @@ import ru.job4j.accidents.model.User;
 import ru.job4j.accidents.repository.AuthorityRepository;
 import ru.job4j.accidents.repository.UserRepository;
 
-import java.util.Optional;
-
 @Controller
 public class RegControl {
 
@@ -28,17 +26,17 @@ public class RegControl {
 
     @PostMapping("/reg")
     public String regSave(Model model, @ModelAttribute User user) {
-        Optional<User> userDb =
-                users.findByUsername(user.getUsername());
-        if (userDb.isPresent()) {
-            model.addAttribute("errorMessage", "А user with this name already exists!");
+        try {
+            user.setEnabled(true);
+            user.setPassword(encoder.encode(user.getPassword()));
+            user.setAuthority(authorities.findByAuthority("ROLE_USER"));
+            users.save(user);
+            return "redirect:/login";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Failed to register user. А user with this name already exists!");
             return "reg";
         }
-        user.setEnabled(true);
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setAuthority(authorities.findByAuthority("ROLE_USER"));
-        users.save(user);
-        return "redirect:/login";
     }
 
     @GetMapping("/reg")
