@@ -22,15 +22,12 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="navbar-nav">
             <a class="nav-item nav-link" href="#">Главная</a>
-            <a class="nav-item nav-link active" th:href="@{/reg}">Регистрация</a>
+            <a class="nav-item nav-link active" th:href="@{/login}">Авторизация</a>
         </div>
     </nav>
     <main class="form-signin">
-        <h1 class="h3 mb-3 fw-normal">Авторизация</h1>
-        <div th:if="${not #lists.isEmpty(errorMessage)}" class="alert alert-danger" role="alert">
-            <span th:text="${errorMessage}"></span>
-        </div>
-        <form th:action="@{/login}" method="post">
+        <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
+        <form th:action="@{/reg}" method="post">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="username" name="username">
                 <label for="username">User name</label>
@@ -40,7 +37,7 @@
                 <label for="password">Password</label>
             </div>
             <hr class="my-4">
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Авторизация</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Регистрация</button>
         </form>
     </main>
 </div>
