@@ -27,6 +27,9 @@
     </nav>
     <main class="form-signin">
         <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
+        <div th:if="${not #lists.isEmpty(errorMessage)}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
         <form th:action="@{/reg}" method="post">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="username" name="username">
