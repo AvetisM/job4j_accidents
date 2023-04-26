@@ -1,4 +1,4 @@
-CREATE TABLE accident (
+CREATE TABLE IF NOT EXISTS accident (
   id serial primary key,
   name text,
   address text,

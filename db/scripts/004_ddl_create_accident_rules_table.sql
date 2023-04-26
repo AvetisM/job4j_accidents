@@ -1,4 +1,4 @@
-CREATE TABLE accident_rules(
+CREATE TABLE IF NOT EXISTS accident_rules(
    id serial PRIMARY KEY,
    accident_id int not null REFERENCES accident(id),
    rule_id int not null REFERENCES accident_rule(id)
