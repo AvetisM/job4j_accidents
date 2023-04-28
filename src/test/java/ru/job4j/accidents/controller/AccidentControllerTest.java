@@ -1,5 +1,6 @@
 package ru.job4j.accidents.controller;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -16,9 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
 import ru.job4j.Main;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.service.AccidentService;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -74,10 +78,15 @@ class AccidentControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldReturnDefaultMessage() throws Exception {
+    public void whenCreateAccident() throws Exception {
         String[] rIds = {"0", "1"};
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("name", "Нарушение пдд.");
+        requestParams.add("text", "Сбили человека");
+        requestParams.add("address", "Улица");
+        requestParams.add("type.id", "1");
         this.mockMvc.perform(post("/accidents/create")
-                        .param("name", "Нарушение пдд."))
+                        .params(requestParams))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
         ArgumentCaptor<Accident> argument = ArgumentCaptor.forClass(Accident.class);
