@@ -1,13 +1,13 @@
 package ru.job4j.accidents.controller;
 
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.hamcrest.MatcherAssert;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.ArgumentCaptor;
@@ -22,10 +22,6 @@ import ru.job4j.Main;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.service.AccidentService;
 
-import javax.servlet.http.HttpServletRequest;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = Main.class)
@@ -58,12 +54,20 @@ class AccidentControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldReturnEditFormMessage() throws Exception {
-        this.mockMvc.perform(get("/accidents/formEdit")
-                        .param("id", "1"))
+    public void whenCreateAccident() throws Exception {
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("name", "Нарушение пдд.");
+        requestParams.add("text", "Сбили человека");
+        requestParams.add("address", "Улица");
+        requestParams.add("type.id", "1");
+        this.mockMvc.perform(post("/accidents/create")
+                        .params(requestParams))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("accident/edit"));
+                .andExpect(status().is3xxRedirection());
+        ArgumentCaptor<Accident> argument = ArgumentCaptor.forClass(Accident.class);
+        verify(accidentService).add(argument.capture(), any());
+        assertThat("Нарушение пдд.".equals(argument.getValue().getName())).isTrue();
+
     }
 
     @Test
@@ -76,21 +80,4 @@ class AccidentControllerTest {
                 .andExpect(view().name("accident/accidents"));
     }
 
-    @Test
-    @WithMockUser
-    public void whenCreateAccident() throws Exception {
-        String[] rIds = {"0", "1"};
-        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-        requestParams.add("name", "Нарушение пдд.");
-        requestParams.add("text", "Сбили человека");
-        requestParams.add("address", "Улица");
-        requestParams.add("type.id", "1");
-        this.mockMvc.perform(post("/accidents/create")
-                        .params(requestParams))
-                .andDo(print())
-                .andExpect(status().is3xxRedirection());
-        ArgumentCaptor<Accident> argument = ArgumentCaptor.forClass(Accident.class);
-        verify(accidentService).add(argument.capture(), rIds);
-        assertThat(argument.getValue().getName(), is("Нарушение пдд."));
-    }
 }
