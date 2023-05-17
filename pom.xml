@@ -12,6 +12,7 @@
 
   <groupId>ru.job4j</groupId>
   <artifactId>job4j_accidents</artifactId>
+  <packaging>war</packaging>
   <version>1.0</version>
   <name>Job4j accidents</name>
 
@@ -180,6 +181,14 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
       </plugin>
     </plugins>
 
